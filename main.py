@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import imutils
 
-videocap = cv2.VideoCapture('data/Microrobot.mp4')
+videocap = cv2.VideoCapture('Microrobot.mp4')
 
 while videocap.isOpened():
     success, frame = videocap.read()
@@ -122,15 +122,15 @@ while videocap.isOpened():
         length = 80
         height = 80
         cv2.arrowedLine(frame, (c_x1, c_y1), (c_x1 + length, c_y1), (220, 170, 0), 2)
-        cv2.arrowedLine(frame, (c_x1, c_y1), (c_x1 , c_y1 + height), (220, 170, 0), 2)
+        cv2.arrowedLine(frame, (c_x1, c_y1), (c_x1, c_y1 + height), (220, 170, 0), 2)
         cv2.putText(frame, 'X', (c_x1 + length + 5, c_y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (35, 100, 150), 2)
-        cv2.putText(frame, 'Y', (c_x1 , c_y1 + height + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (35, 100, 150), 2)
+        cv2.putText(frame, 'Y', (c_x1, c_y1 + height + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (35, 100, 150), 2)
 
         # Show continuous frame with information
         window_vertical = np.vstack((grayScaled, darkMask,lightMask2))
         cv2.imshow('Stacked Windows', window_vertical)
         cv2.imshow('Frame', frame)
-        cv2.moveWindow('Frame', 340,-100)
+        cv2.moveWindow('Frame', 340, -100)
 
     # Press 'space to pause, ''q' to quit
     key = cv2.waitKey(1)
