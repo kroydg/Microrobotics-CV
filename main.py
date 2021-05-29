@@ -87,7 +87,7 @@ while videocap.isOpened():
 
             # Display robot orientation and angle to cargo
             cv2.putText(frame, 'Angle to Cargo: %f' % angleToCargo, (380, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2)
-            cv2.putText(frame, 'Delta_Angle: %f' % (d_angle-10), (380, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2)
+            cv2.putText(frame, 'Delta_Angle: %f' % (d_angle), (380, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2)
             print('Real-Time Position of Robot: X: %f, Y: %f, Angle: %f ' % (rx1, ry1-5, angle2))
             cv2.putText(frame, 'Robot Orientation: %f' % angle2, (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2)
 
@@ -96,20 +96,23 @@ while videocap.isOpened():
                             (rx2, ry2),
                             (int(x), int(y)), (255, 0, 0), 3)
 
-        # Use contour size to determine if cargo is found
+        # Option#1: Use contour size to determine if cargo is found
         mediumMask = cv2.inRange(grayScaled, 10, 250)
         cnts_total = cv2.findContours(mediumMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
         c_total = sorted(cnts_total, key=cv2.contourArea, reverse=True)[:5]
         area = cv2.contourArea(c_total[0])
-        if area > 5500:
+
+        # Option#2: Use distance to determine if cargo is found
+        distance = np.sqrt(abs(int(x) - int(rx2)) ** 2 + abs(int(y) - int(ry2)) ** 2)
+
+        if distance < 60:
             cv2.putText(frame, 'Cargo Found', (30, 500), cv2.FONT_HERSHEY_SIMPLEX, 1, (50, 180, 120), 3)
             cargo_found = True
         else:
             cv2.putText(frame, 'Looking for Cargo', (30, 500), cv2.FONT_HERSHEY_SIMPLEX, 1, (35, 70, 100), 3)
 
         # Use distance to determine if cargo is picked up
-        distance = np.sqrt(abs(int(x) - int(rx2)) ** 2 + abs(int(y) - int(ry2)) ** 2)
-        if distance < 40:
+        if distance < 39:
             cv2.putText(frame, 'Cargo Picked up', (350, 500), cv2.FONT_HERSHEY_SIMPLEX, 1, (35, 100, 150), 3)
             cargo_picked_up = True
 
